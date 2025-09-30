@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { BarChart2, FileText, MessageSquare, Mail } from 'lucide-react';
+import AppHeader from './AppHeader';
 
 const Sidebar = () => {
     const navLinks = [
@@ -40,9 +41,9 @@ const Sidebar = () => {
 
 const Layout = () => {
     return (
-        <div className="flex h-screen bg-gray-900 text-white">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
+        <div className="bg-gray-900 text-white">
+            <AppHeader />
+            <main className="container mx-auto p-8">
                 <Outlet />
             </main>
         </div>
