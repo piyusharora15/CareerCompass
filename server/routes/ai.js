@@ -38,15 +38,27 @@ router.route("/generate-resume-bullets").post(async (req, res) => {
   }
   try {
     const prompt = `
-            You are an expert resume writer specializing in creating impactful, metric-driven bullet points for work experience sections.
-            Your task is to rewrite the following user-provided accomplishment into three distinct, powerful, and ATS-optimized bullet points.
-            Each bullet point should start with a strong action verb and, where possible, quantify the results.
+    You are an expert career analyst and tech recruiter for a top-tier company.
+    Based on the following user profile, generate a detailed career insights report.
 
-            **User's Accomplishment:** "${accomplishment}"
-            **Relevant Skills:** "${skills}"
+    User Profile:
+    - Industry: "${industry}"
+    - Current Role: "${currentRole}"
+    - Desired Role: "${desiredRole}"
+    - Current Skills: ${skills.join(", ")}
 
-            Generate three variations of the bullet point. Return the response as a single string, with each bullet point starting with a '*' and separated by a newline.
-        `;
+    Your response MUST be a valid JSON object. Do not include any text or markdown formatting before or after the JSON.
+    The JSON object must have the following structure:
+    {
+      "industryTrends": ["A key trend in ${industry} is...", "Another trend is..."],
+      "inDemandSkills": ["For a ${desiredRole}, the most in-demand skills are...", "Also important is..."],
+      "skillGapAnalysis": {
+        "matchedSkills": ["List skills the user has that are relevant for the desired role"],
+        "missingSkills": ["List critical skills for the desired role that the user does not have"]
+      },
+      "actionableFeedback": "To bridge the gap from a ${currentRole} to a ${desiredRole}, the user should focus on..."
+    }
+`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
@@ -63,12 +75,9 @@ router.route("/generate-cover-letter").post(async (req, res) => {
   const { jobDescription, userSkills, companyName } = req.body;
 
   if (!jobDescription || !userSkills || !companyName) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "Missing required fields: jobDescription, userSkills, companyName",
-      });
+    return res.status(400).json({
+      error: "Missing required fields: jobDescription, userSkills, companyName",
+    });
   }
 
   try {
