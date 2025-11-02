@@ -1,0 +1,73 @@
+/* This is a custom, simple dark theme for PrismJS, the syntax highlighter.
+  We're creating this new file in 'client/src/'.
+*/
+
+/* This block sets the default text color and font for all code. */
+/* We use a monospace font to make it look like a real code editor. */
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2; /* Light text for dark background */
+	background: none;
+	font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre; /* Preserves whitespace and newlines */
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	tab-size: 2; /* Use 2 spaces for tabs */
+}
+
+/* This sets the background color for the editor area itself. */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: 0;
+	overflow: auto;
+	background: #2d2d2d; /* Dark gray background */
+}
+
+/* --- Token Colors --- */
+/* 'Tokens' are the different parts of the code (punctuation, strings, numbers, etc.) */
+
+/* Comments and faded text */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+/* Punctuation like { } [ ] , : */
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+/* JSON keys (properties) */
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #66d9ef; /* Light blue */
+}
+
+/* JSON numbers and boolean (true/false) */
+.token.boolean,
+.token.number {
+	color: #ae81ff; /* Purple */
+}
+
+/* JSON strings (the values) */
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e; /* Green */
+}
+
+/* JSON keywords (null) */
+.token.keyword {
+	color: #f92672; /* Pink */
+}
