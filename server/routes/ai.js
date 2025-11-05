@@ -9,38 +9,46 @@ const router = Router();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // This function will find and parse a JSON object from a string that might contain other text.
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash-preview-05-20",
+});
+
 const parseAiResponse = (rawText) => {
-    try {
-        const startIndex = rawText.indexOf('{');
-        const endIndex = rawText.lastIndexOf('}');
-        
-        if (startIndex === -1 || endIndex === -1) {
-            // THE FIX: We log the bad response to our server console for debugging.
-            console.error("--- DEBUG: AI RESPONSE DID NOT CONTAIN JSON ---");
-            console.error(rawText);
-            // Then we throw the error.
-            throw new Error("No valid JSON object found in AI response.");
-        }
+  try {
+    const startIndex = rawText.indexOf("{");
+    const endIndex = rawText.lastIndexOf("}");
 
-        const jsonString = rawText.substring(startIndex, endIndex + 1);
-        return JSON.parse(jsonString);
-
-    } catch (parseError) {
-        console.error("DEBUG: Failed to parse AI response. Raw text:", rawText);
-        throw new Error(`AI response was not valid JSON. Parse error: ${parseError.message}`);
+    if (startIndex === -1 || endIndex === -1) {
+      // THE FIX: We log the bad response to our server console for debugging.
+      console.error("--- DEBUG: AI RESPONSE DID NOT CONTAIN JSON ---");
+      console.error(rawText);
+      // Then we throw the error.
+      throw new Error("No valid JSON object found in AI response.");
     }
+
+    const jsonString = rawText.substring(startIndex, endIndex + 1);
+    return JSON.parse(jsonString);
+  } catch (parseError) {
+    console.error("DEBUG: Failed to parse AI response. Raw text:", rawText);
+    throw new Error(
+      `AI response was not valid JSON. Parse error: ${parseError.message}`
+    );
+  }
 };
 
-router.post('/generate-insights', requireSignin, async (req, res) => {
-    const { industry, currentRole, desiredRole, skills } = req.body;
+router.post("/generate-insights", requireSignin, async (req, res) => {
+  const { industry, currentRole, desiredRole, skills } = req.body;
 
-    if (!industry || !currentRole || !desiredRole || !skills) {
-        return res.status(400).json({ error: 'Missing career profile information.' });
-    }
+  if (!industry || !currentRole || !desiredRole || !skills) {
+    return res
+      .status(400)
+      .json({ error: "Missing career profile information." });
+  }
 
-    try {
-        // --- THE FIX: A MUCH CLEANER AND MORE ROBUST PROMPT ---
-        const prompt = `
+  try {
+    // --- THE FIX: A MUCH CLEANER AND MORE ROBUST PROMPT ---
+    const prompt = `
             You are a world-class career analyst and senior tech recruiter.
             Your task is to provide a detailed career insights report based on the user's profile.
 
@@ -48,7 +56,7 @@ router.post('/generate-insights', requireSignin, async (req, res) => {
             - Industry: "${industry}"
             - Current Role: "${currentRole}"
             - Desired Role: "${desiredRole}"
-            - Current Skills: ${skills.join(', ')}
+            - Current Skills: ${skills.join(", ")}
 
             Instructions for your response:
             1.  Your response MUST be a single, valid JSON object and nothing else.
@@ -73,67 +81,84 @@ router.post('/generate-insights', requireSignin, async (req, res) => {
             }
         `;
 
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-05-20" });
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-
-        // We log the raw text just in case, for debugging.
-        console.log("--- DEBUG: RAW AI RESPONSE ---");
-        console.log(text);
-
-        // We use our safe parser.
-        const insightsJson = parseAiResponse(text);
-        
-        res.json(insightsJson);
-
-    } catch (error) {
-        // This catch block is still correct and will report errors to the frontend.
-        console.error("--- FULL AI ERROR STACK ---", error);
-        res.status(500).json({ error: `Server Error: ${error.message}` });
-    }
-});
-// --- Route for Resume Bullet Points ---
-router.route("/generate-resume-bullets").post(async (req, res) => {
-  const { accomplishment, skills } = req.body;
-
-  if (!accomplishment || !skills) {
-    return res
-      .status(400)
-      .json({ error: "Missing required fields: accomplishment, skills" });
-  }
-  try {
-    const prompt = `
-    You are an expert career analyst and tech recruiter for a top-tier company.
-    Based on the following user profile, generate a detailed career insights report.
-
-    User Profile:
-    - Industry: "${industry}"
-    - Current Role: "${currentRole}"
-    - Desired Role: "${desiredRole}"
-    - Current Skills: ${skills.join(", ")}
-
-    Your response MUST be a valid JSON object. Do not include any text or markdown formatting before or after the JSON.
-    The JSON object must have the following structure:
-    {
-      "industryTrends": ["A key trend in ${industry} is...", "Another trend is..."],
-      "inDemandSkills": ["For a ${desiredRole}, the most in-demand skills are...", "Also important is..."],
-      "skillGapAnalysis": {
-        "matchedSkills": ["List skills the user has that are relevant for the desired role"],
-        "missingSkills": ["List critical skills for the desired role that the user does not have"]
-      },
-      "actionableFeedback": "To bridge the gap from a ${currentRole} to a ${desiredRole}, the user should focus on..."
-    }
-`;
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash-preview-05-20",
+    });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    res.json({ bullets: text.split("\n").filter((b) => b.startsWith("*")) });
+    // We log the raw text just in case, for debugging.
+    console.log("--- DEBUG: RAW AI RESPONSE ---");
+    console.log(text);
+
+    // We use our safe parser.
+    const insightsJson = parseAiResponse(text);
+
+    res.json(insightsJson);
   } catch (error) {
-    console.error("Error generating resume bullets:", error);
-    res.status(500).json({ error: "Failed to generate resume bullets" });
+    // This catch block is still correct and will report errors to the frontend.
+    console.error("--- FULL AI ERROR STACK ---", error);
+    res.status(500).json({ error: `Server Error: ${error.message}` });
   }
+});
+// --- Route for Resume Bullet Points ---
+router.post("/generate-resume-content", requireSignin, async (req, res) => {
+  try {
+    const { industry, skills } = req.body;
+
+    const prompt = `
+            You are an expert career coach and resume writer.
+            Generate a concise, professional, and impactful summary for a resume.
+            The candidate is in the ${industry} industry and has the following skills: ${skills}.
+            The summary must be 3-4 sentences long and optimized for Applicant Tracking Systems (ATS).
+            Return only the summary text, with no other-introductory text.
+        `;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({ content: text });
+  } catch (error) {
+        console.error("Error in /generate-resume-content:", error);
+        // We send a 500 status code (Internal Server Error) and the error message.
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// --- API Route: Generate Experience Bullet Points ---
+// This is the second AI route, which you can use to add AI generation to the "experience" section.
+router.post('/generate-resume-bullets', requireSignin, async (req, res) => {
+    try {
+        // This one takes an accomplishment and skills from the frontend.
+        const { accomplishment, skills } = req.body;
+
+        // A different prompt, focused on creating metric-driven bullet points.
+        const prompt = `
+            You are an expert resume writer specializing in the STAR (Situation, Task, Action, Result) method.
+            Rewrite the following user-provided accomplishment into three distinct, powerful, and metric-driven bullet points for a resume.
+            Each bullet point must start with a strong action verb.
+
+            User's Accomplishment: "${accomplishment}"
+            Relevant Skills: "${skills}"
+
+            Return the response as a single string, with each bullet point starting with a '*' and separated by a newline.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+
+        // We parse the string into an array before sending it.
+        const bullets = text.split('\n').filter(b => b.startsWith('*'));
+        // We send the array of bullets back to the frontend.
+        res.json({ bullets: bullets });
+
+    } catch (error) {
+        console.error("Error in /generate-resume-bullets:", error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // --- Route for Cover Letter ---
