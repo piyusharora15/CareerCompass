@@ -1,8 +1,7 @@
-// client/src/components/Navbar.jsx
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { BrainCircuit, X, Menu } from "lucide-react";
+import { BrainCircuit, X, Menu, LogOut, LayoutDashboard } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { APP_NAME } from "../constants/appConfig";
 
@@ -13,9 +12,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -26,113 +23,79 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // Nav links updated to match new features
   const navLinks = [
-    { name: "Industry Insights", path: "/app" },
-    { name: "Resume Builder", path: "/app/resume-builder" },
-    { name: "Mock Interview", path: "/app/mock-interview" },
-    { name: "Cover Letter", path: "/app/cover-letter" },
+    { name: "Insights", path: "/app" },
+    { name: "Job Tracker", path: "/app/tracker" },
+    { name: "Success Analytics", path: "/app/analytics" },
+    { name: "Interview Journal", path: "/app/journal" },
   ];
 
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled || mobileMenuOpen
-          ? "bg-gray-900/80 backdrop-blur-md shadow-lg"
-          : "bg-transparent"
+        scrolled || mobileMenuOpen ? "bg-[#0f172a]/90 backdrop-blur-md shadow-xl" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between p-6">
-        {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <BrainCircuit className="h-8 w-8 text-blue-400" />
-          <h1 className="text-3xl font-bold text-white cursor-pointer">
-            {APP_NAME}
-          </h1>
+          <BrainCircuit className="h-8 w-8 text-blue-500" />
+          <h1 className="text-2xl font-black text-white tracking-tighter uppercase">{APP_NAME}</h1>
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
-              className="text-gray-300 hover:text-white transition-colors font-medium"
+              className="text-slate-400 hover:text-white transition-colors font-bold text-sm uppercase tracking-widest"
             >
               {link.name}
             </Link>
           ))}
+          
           {token ? (
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
-            >
-              Logout
-            </button>
+            <div className="flex items-center gap-4 border-l border-slate-700 pl-6">
+              <Link to="/app" className="text-blue-500 hover:text-blue-400 font-bold text-sm uppercase flex items-center gap-2">
+                <LayoutDashboard size={18}/> Dashboard
+              </Link>
+              <button onClick={handleLogout} className="text-slate-500 hover:text-red-500 transition-colors">
+                <LogOut size={20} />
+              </button>
+            </div>
           ) : (
-            <Link
-              to="/login"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
-            >
-              Login / Sign Up
+            <Link to="/login" className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg shadow-blue-900/20">
+              Login
             </Link>
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
-        </div>
+        {/* Mobile Toggle */}
+        <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-gray-900/95 backdrop-blur-md"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden bg-[#0f172a] border-b border-slate-800 p-6 flex flex-col space-y-6"
           >
-            <div className="flex flex-col items-center space-y-4 pt-4 pb-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className="text-gray-300 hover:text-white text-lg"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
-              {token ? (
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg w-11/12"
-                >
-                  Logout
-                </button>
-              ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg w-11/12 text-center"
-                >
-                  Login / Sign Up
-                </Link>
-              )}
-            </div>
+            {navLinks.map((link) => (
+              <Link key={link.name} to={link.path} onClick={() => setMobileMenuOpen(false)} className="text-slate-300 font-bold uppercase text-center">
+                {link.name}
+              </Link>
+            ))}
+            {token ? (
+               <button onClick={handleLogout} className="bg-red-600 text-white font-bold py-3 rounded-xl">Logout</button>
+            ) : (
+               <Link to="/login" className="bg-blue-600 text-white font-bold py-3 rounded-xl text-center">Login</Link>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
