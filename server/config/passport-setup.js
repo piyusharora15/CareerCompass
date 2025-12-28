@@ -1,37 +1,46 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import User from '../models/user.model.js';
+import User from '../models/User.js';
 import 'dotenv/config';
 
+// These two blocks are REQUIRED by Passport, even for JWT flows
+passport.serializeUser((data, done) => done(null, data));
+passport.deserializeUser((data, done) => done(null, data));
+
 passport.use(
-    new GoogleStrategy({
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/users/google/callback',
-        scope: ['profile', 'email']
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:5000/users/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
-        try {
-            // Check if user already exists
-            let user = await User.findOne({ googleId: profile.id });
+      try {
+        let user = await User.findOne({ googleId: profile.id });
+        const email = profile.emails?.[0]?.value;
 
-            if (user) {
-                return done(null, user);
+        if (!user) {
+          if (!email) return done(new Error('No email found'), null);
+          user = await User.findOne({ email });
+
+          if (user) {
+            user.googleId = profile.id;
+          } else {
+            const baseUsername = (profile.displayName || 'user').replace(/\s+/g, '').toLowerCase();
+            let finalUsername = baseUsername;
+            let suffix = 1;
+            while (await User.exists({ username: finalUsername })) {
+              finalUsername = `${baseUsername}${suffix++}`;
             }
-
-            // If not, create a new user
-            user = new User({
-                googleId: profile.id,
-                username: profile.displayName,
-                email: profile.emails[0].value,
-                // Password is not required for Google OAuth users
-            });
-
-            await user.save();
-            return done(null, user);
-
-        } catch (error) {
-            return done(error, null);
+            user = new User({ googleId: profile.id, username: finalUsername, email });
+          }
+          await user.save();
         }
-    })
+        // Return the user object. Token will be created in the route.
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
+    }
+  )
 );
