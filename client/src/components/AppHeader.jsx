@@ -1,75 +1,49 @@
-// client/src/components/AppHeader.jsx
 import React, { useContext } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { BrainCircuit, User, LogOut } from "lucide-react";
+import { BrainCircuit, LogOut, BarChart3, Map } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
-import { APP_NAME } from "../constants/appConfig";
 
 const AppHeader = () => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/"); // Redirect to home page after logout
-  };
-
   const navLinks = [
-    { name: "Industry Insights", path: "/app" },
-    { name: "Resume Builder", path: "/app/resume-builder" },
-    { name: "Mock Interview", path: "/app/mock-interview" },
-    { name: "Cover Letter", path: "/app/cover-letter" },
+    { name: "Insights", path: "/app", icon: <BarChart3 size={18}/> },
+    { name: "Skill Roadmap", path: "/app/roadmap", icon: <Map size={18}/> },
   ];
 
   return (
-    <header className="bg-gray-800/50 backdrop-blur-sm sticky top-0 z-40 border-b border-gray-700">
-      <div className="container mx-auto flex items-center justify-between p-4">
-        {/* Left Side: Logo */}
+    <header className="bg-[#1e293b]/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-800">
+      <div className="max-w-7xl mx-auto flex items-center justify-between p-4 px-8">
         <Link to="/app" className="flex items-center space-x-2">
-          <BrainCircuit className="h-7 w-7 text-blue-400" />
-          <h1 className="text-2xl font-bold text-white cursor-pointer">
-            {APP_NAME}
-          </h1>
+          <BrainCircuit className="h-7 w-7 text-blue-500" />
+          <h1 className="text-xl font-bold text-white tracking-tighter uppercase">CareerCompass</h1>
         </Link>
 
-        {/* Center Nav (desktop) */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden lg:flex items-center space-x-8">
           {navLinks.map((link) => (
             <NavLink
               key={link.name}
               to={link.path}
               end={link.path === "/app"}
               className={({ isActive }) =>
-                `font-medium transition-colors ${
-                  isActive
-                    ? "text-blue-400"
-                    : "text-gray-400 hover:text-white"
+                `flex items-center gap-2 text-sm font-bold transition-all ${
+                  isActive ? "text-blue-500" : "text-slate-400 hover:text-white"
                 }`
               }
             >
-              {link.name}
+              {link.icon} {link.name}
             </NavLink>
           ))}
         </nav>
 
-        {/* Right Side: User Actions */}
-        <div className="flex items-center space-x-4">
-          <button
-            type="button"
-            className="p-2 rounded-full hover:bg-gray-700 transition-colors"
-            aria-label="User profile"
-          >
-            <User className="h-5 w-5 text-gray-300" />
-          </button>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="flex items-center space-x-2 bg-red-600/50 hover:bg-red-600/80 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-          >
-            <LogOut className="h-5 w-5" />
-            <span>Logout</span>
-          </button>
-        </div>
+        <button 
+          onClick={() => { logout(); navigate("/"); }} 
+          className="flex items-center gap-2 text-slate-400 hover:text-red-400 transition-colors font-bold text-sm uppercase"
+        >
+          <span className="hidden sm:inline">Sign Out</span>
+          <LogOut size={18} />
+        </button>
       </div>
     </header>
   );
