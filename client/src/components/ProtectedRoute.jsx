@@ -1,16 +1,13 @@
-import React, { useContext } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+// client/src/components/ProtectedRoute.jsx
+import { useContext } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const ProtectedRoute = () => {
-    const { token, isAuthReady } = useContext(AuthContext);
+  const { token, isAuthReady } = useContext(AuthContext);
 
-    if (!isAuthReady) {
-        // You can return a loading spinner here
-        return <div>Loading...</div>;
-    }
+  if (!isAuthReady) return null; // Or a loading spinner
 
-    return token ? <Outlet /> : <Navigate to="/login" replace />;
+  return token ? <Outlet /> : <Navigate to="/login" />;
 };
-
 export default ProtectedRoute;
