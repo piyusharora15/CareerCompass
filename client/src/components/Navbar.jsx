@@ -23,12 +23,9 @@ const Navbar = () => {
     navigate("/");
   };
 
-  // Nav links updated to match new features
   const navLinks = [
-    { name: "Insights", path: "/app" },
-    { name: "Job Tracker", path: "/app/tracker" },
-    { name: "Success Analytics", path: "/app/analytics" },
-    { name: "Interview Journal", path: "/app/journal" },
+    { name: "Industry Insights", path: "/app" },
+    { name: "Skill Roadmap", path: "/app/roadmap" },
   ];
 
   return (
