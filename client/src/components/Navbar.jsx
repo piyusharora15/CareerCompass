@@ -23,9 +23,10 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // Updated paths to match flattened URL structure
   const navLinks = [
-    { name: "Industry Insights", path: "/app" },
-    { name: "Skill Roadmap", path: "/app/roadmap" },
+    { name: "Industry Insights", path: "/insights" },
+    { name: "Skill Roadmap", path: "/roadmap" },
   ];
 
   return (
@@ -35,9 +36,12 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between p-6">
-        <Link to="/" className="flex items-center space-x-2">
-          <BrainCircuit className="h-8 w-8 text-blue-500" />
-          <h1 className="text-2xl font-black text-white tracking-tighter uppercase">{APP_NAME}</h1>
+        {/* LOGO: Redirects to landing page '/' */}
+        <Link to="/" className="flex items-center space-x-2 group">
+          <BrainCircuit className="h-8 w-8 text-blue-500 group-hover:rotate-12 transition-transform" />
+          <h1 className="text-2xl font-black text-white tracking-tighter uppercase italic">
+            Career<span className="text-blue-500">Compass</span>
+          </h1>
         </Link>
 
         {/* Desktop Menu */}
@@ -46,7 +50,7 @@ const Navbar = () => {
             <Link
               key={link.name}
               to={link.path}
-              className="text-slate-400 hover:text-white transition-colors font-bold text-sm uppercase tracking-widest"
+              className="text-slate-400 hover:text-white transition-colors font-black text-[10px] uppercase tracking-[0.2em]"
             >
               {link.name}
             </Link>
@@ -54,15 +58,15 @@ const Navbar = () => {
           
           {token ? (
             <div className="flex items-center gap-4 border-l border-slate-700 pl-6">
-              <Link to="/app" className="text-blue-500 hover:text-blue-400 font-bold text-sm uppercase flex items-center gap-2">
-                <LayoutDashboard size={18}/> Dashboard
+              <Link to="/insights" className="text-blue-500 hover:text-blue-400 font-black text-[10px] uppercase flex items-center gap-2 tracking-widest">
+                <LayoutDashboard size={16}/> Dashboard
               </Link>
               <button onClick={handleLogout} className="text-slate-500 hover:text-red-500 transition-colors">
                 <LogOut size={20} />
               </button>
             </div>
           ) : (
-            <Link to="/login" className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg shadow-blue-900/20">
+            <Link to="/login" className="bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 px-6 rounded-xl transition-all shadow-lg shadow-blue-900/20 text-xs uppercase tracking-widest">
               Login
             </Link>
           )}
@@ -84,14 +88,14 @@ const Navbar = () => {
             className="md:hidden bg-[#0f172a] border-b border-slate-800 p-6 flex flex-col space-y-6"
           >
             {navLinks.map((link) => (
-              <Link key={link.name} to={link.path} onClick={() => setMobileMenuOpen(false)} className="text-slate-300 font-bold uppercase text-center">
+              <Link key={link.name} to={link.path} onClick={() => setMobileMenuOpen(false)} className="text-slate-300 font-black uppercase text-center text-xs tracking-widest italic">
                 {link.name}
               </Link>
             ))}
             {token ? (
-               <button onClick={handleLogout} className="bg-red-600 text-white font-bold py-3 rounded-xl">Logout</button>
+               <button onClick={handleLogout} className="bg-red-600 text-white font-black py-3 rounded-xl uppercase text-xs tracking-widest">Logout</button>
             ) : (
-               <Link to="/login" className="bg-blue-600 text-white font-bold py-3 rounded-xl text-center">Login</Link>
+               <Link to="/login" className="bg-blue-600 text-white font-black py-3 rounded-xl text-center uppercase text-xs tracking-widest">Login</Link>
             )}
           </motion.div>
         )}
