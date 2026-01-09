@@ -7,6 +7,7 @@ const OnboardingRoute = () => {
     const { user, isAuthReady } = useContext(AuthContext);
     const location = useLocation();
 
+    // While checking authentication and profile status
     if (!isAuthReady) {
         return (
             <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
@@ -15,13 +16,15 @@ const OnboardingRoute = () => {
         );
     }
 
-    // Check if onboarding is actually required
+    // Check if onboarding is actually required (No profile or industry data)
     const needsOnboarding = user && (!user.careerProfile || !user.careerProfile.industry);
 
     if (needsOnboarding) {
-        return <Navigate to="/app/onboarding" state={{ from: location }} replace />;
+        // FLAT URL: Redirecting to /onboarding instead of /app/onboarding
+        return <Navigate to="/onboarding" state={{ from: location }} replace />;
     }
 
+    // If profile exists, allow access to the requested feature (/insights or /roadmap)
     return <Outlet />;
 };
 
