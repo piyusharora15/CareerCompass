@@ -16,30 +16,33 @@ import RoadmapPage from "./pages/Roadmap";
 function App() {
   return (
     <Routes>
-      {/* Public Routes */}
+      {/* --- PUBLIC ROUTES --- */}
       <Route path="/" element={<HomeLayout />}>
         <Route index element={<HomePage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      
-      {/* This is the route that catches the Google Token */}
+
+      {/* Google Auth Redirect Handler */}
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-      {/* Protected App Routes */}
+      {/* --- PROTECTED APP ROUTES --- */}
       <Route element={<ProtectedRoute />}>
         
-        {/* 1. Onboarding is accessible to ANY logged in user without a profile */}
-        <Route path="/app/onboarding" element={<OnboardingPage />} />
+        {/* 1. Onboarding Path 
+          Accessible to any logged-in user who hasn't completed their profile.
+        */}
+        <Route path="/onboarding" element={<OnboardingPage />} />
 
-        {/* 2. All other app routes REQUIRE a completed profile */}
+        {/* 2. Feature Routes 
+          Requires both Login AND a completed Onboarding Profile.
+        */}
         <Route element={<OnboardingRoute />}>
-          <Route path="/app" element={<Layout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="roadmap" element={<RoadmapPage />} />
+          <Route element={<Layout />}>
+            <Route path="/insights" element={<Dashboard />} />
+            <Route path="/roadmap" element={<RoadmapPage />} />
           </Route>
         </Route>
-
       </Route>
     </Routes>
   );
