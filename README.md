@@ -74,12 +74,14 @@ The frontend renders an interactive timeline using **Framer Motion**. Every time
 
 ---
 
+---
+
 ## 📸 Project Preview
 
-| Feature | Preview |
+| Feature | Visual Representation |
 | :--- | :--- |
-| **Industry Insights** | ![Dashboard Screenshot](https://via.placeholder.com/600x400?text=Insights+Dashboard) |
-| **Skill Architect** | ![Roadmap Screenshot](https://via.placeholder.com/600x400?text=Skill+Architect+Roadmap) |
+| **Interactive Dashboard** | ![Dashboard Screenshot](./client/src/assets/Dashboard_Screenshot.png) |
+| **Skill Architect Roadmap** | ![Roadmap Screenshot](./client/src/assets/Roadmap_Screenshot.png) |
 
 ---
 
