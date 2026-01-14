@@ -27,7 +27,7 @@ const Roadmap = () => {
       setLoading(true);
       try {
         // Fetch saved roadmap structure from DB
-        const roadmapRes = await axios.get("http://localhost:5000/api/roadmap/my-roadmap", {
+        const roadmapRes = await axios.get("https://careercompass-backend-3nf6.onrender.com/api/roadmap/my-roadmap", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (roadmapRes.data && roadmapRes.data.length > 0) {
@@ -35,7 +35,7 @@ const Roadmap = () => {
         }
 
         // Fetch completion progress
-        const progressRes = await axios.get("http://localhost:5000/api/roadmap/progress", {
+        const progressRes = await axios.get("https://careercompass-backend-3nf6.onrender.com/api/roadmap/progress", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setCompletedNodes(progressRes.data);
@@ -55,7 +55,7 @@ const Roadmap = () => {
     try {
       const missing = user?.careerProfile?.missingSkills || [];
       const res = await axios.post(
-        "http://localhost:5000/api/roadmap/generate", 
+        "https://careercompass-backend-3nf6.onrender.com/api/roadmap/generate", 
         { 
           missingSkills: missing, 
           desiredRole: user?.careerProfile?.desiredRole 
@@ -75,7 +75,7 @@ const Roadmap = () => {
     e.stopPropagation();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/roadmap/toggle-complete", 
+        "https://careercompass-backend-3nf6.onrender.com/api/roadmap/toggle-complete", 
         { nodeId }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
