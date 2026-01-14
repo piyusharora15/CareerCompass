@@ -84,24 +84,27 @@ router.get(
 );
 
 // 2. Google's callback URL
+
 router.get(
   '/google/callback',
   passport.authenticate('google', {
     session: false,
-    failureRedirect: 'http://localhost:5173/login?error=google_auth_failed',
+    // Use dynamic redirect for failure
+    failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:5173'}/login?error=google_auth_failed`,
   }),
   (req, res) => {
     try {
-      // req.user is populated by passport-setup.js done(null, user)
       const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
         expiresIn: TOKEN_EXPIRY,
       });
 
-      // Redirect to the frontend callback page passing the token
-      res.redirect(`http://localhost:5173/auth/callback?token=${token}`);
+      // USE CLIENT_URL FOR PRODUCTION REDIRECT
+      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+      res.redirect(`${clientUrl}/auth/callback?token=${token}`);
     } catch (err) {
       console.error("JWT Sign Error:", err);
-      res.redirect('http://localhost:5173/login?error=token_error');
+      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+      res.redirect(`${clientUrl}/login?error=token_error`);
     }
   }
 );
