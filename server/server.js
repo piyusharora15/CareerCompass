@@ -13,6 +13,8 @@ import roadmapRouter from "./routes/roadmap.js";
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.set("trust proxy", 1);
+
 // Middleware
 app.use(cors({ 
   origin: 'https://careercompass-dev.vercel.app', 
