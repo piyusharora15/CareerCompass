@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const res = await axios.get("http://localhost:5000/users/me", {
+      const res = await axios.get("https://careercompass-backend-3nf6.onrender.com/users/me", {
         headers: { Authorization: `Bearer ${activeToken}` },
       });
       setUser(res.data);
