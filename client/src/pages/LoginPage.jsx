@@ -15,7 +15,7 @@ const LoginPage = () => {
 
   // Function to trigger Passport Google Auth
   const handleGoogleAuth = () => {
-    window.location.href = "http://localhost:5000/users/google";
+    window.location.href = "https://careercompass-backend-3nf6.onrender.com/users/google";
   };
 
   const handleLogin = async (e) => {
@@ -24,7 +24,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/users/login", { email, password });
+      const res = await axios.post("https://careercompass-backend-3nf6.onrender.com/users/login", { email, password });
       
       // The login function in AuthContext handles token storage
       await login(res.data.token);
