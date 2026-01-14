@@ -14,7 +14,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({ origin: 'https://careercompass-dev.vercel.app/' }));
+app.use(cors({ 
+  origin: 'https://careercompass-dev.vercel.app', 
+  credentials: true 
+}));
 app.use(express.json());
 app.use(passport.initialize());
 
