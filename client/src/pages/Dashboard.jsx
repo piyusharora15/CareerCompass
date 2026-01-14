@@ -25,7 +25,7 @@ const Dashboard = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:5000/career-insights/my-insight?role=${role || user.careerProfile.desiredRole}`,
+        `https://careercompass-backend-3nf6.onrender.com/career-insights/my-insight?role=${role || user.careerProfile.desiredRole}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setInsight(res.data);
@@ -47,12 +47,12 @@ const Dashboard = () => {
     setIsRegenerating(true);
     try {
       if (newRole) {
-        await axios.post("http://localhost:5000/users/profile", 
+        await axios.post("https://careercompass-backend-3nf6.onrender.com/users/profile", 
           { ...user.careerProfile, desiredRole: roleToUse },
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
-      const res = await axios.post("http://localhost:5000/career-insights/generate",
+      const res = await axios.post("https://careercompass-backend-3nf6.onrender.com/career-insights/generate",
         { ...user.careerProfile, desiredRole: roleToUse },
         { headers: { Authorization: `Bearer ${token}` } }
       );
