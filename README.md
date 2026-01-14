@@ -20,7 +20,10 @@ CareerCompass acts as a persistent "Personal Engineering Manager":
 
 ## 🏗️ System Design & Architecture Decisions
 
+### Technical Sequence Diagram
+The following diagram illustrates the lifecycle of a user request—from OAuth authentication to AI-driven roadmap generation and persistent milestone tracking.
 
+![CareerCompass Technical Sequence Diagram](./client/src/assets/SequenceDiagram.png)
 
 ### 1. Decoupled MERN Architecture
 The system is built on a decoupled architecture to ensure clear separation of concerns. The **Express.js** backend acts as a strict API gateway, while the **React** frontend manages complex UI states and asynchronous data fetching.
