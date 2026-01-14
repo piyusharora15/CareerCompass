@@ -13,7 +13,7 @@ const SignupPage = () => {
   const navigate = useNavigate();
 
   const handleGoogleAuth = () => {
-    window.location.href = "http://localhost:5000/users/google";
+    window.location.href = "https://careercompass-backend-3nf6.onrender.com/users/google";
   };
 
   const handleSignup = async (e) => {
@@ -21,7 +21,7 @@ const SignupPage = () => {
     setError("");
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/users/signup", { username, email, password });
+      await axios.post("https://careercompass-backend-3nf6.onrender.com/users/signup", { username, email, password });
       navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed.");
