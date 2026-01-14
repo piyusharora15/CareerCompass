@@ -28,12 +28,12 @@ const OnboardingPage = () => {
       const profileData = { industry, currentRole, desiredRole, skills: skillList };
 
       // 1. SAVE PROFILE
-      await axios.post("http://localhost:5000/users/profile", profileData, {
+      await axios.post("https://careercompass-backend-3nf6.onrender.com/users/profile", profileData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       // 2. GENERATE INITIAL INSIGHTS (AI CALL)
-      await axios.post("http://localhost:5000/career-insights/generate", profileData, {
+      await axios.post("https://careercompass-backend-3nf6.onrender.com/career-insights/generate", profileData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
