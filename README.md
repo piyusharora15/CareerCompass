@@ -1,5 +1,11 @@
 # CareerCompass | AI-Driven Skill Gap Analysis & Roadmap Engine
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Now-emerald?style=for-the-badge&logo=vercel)](https://careercompass-dev.vercel.app/)
+[![GitHub License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](https://github.com/piyusharora15/career-compass/blob/main/LICENSE)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-emerald.svg?style=for-the-badge)](https://github.com/piyusharora15/career-compass/graphs/commit-activity)
+
+### 🔗 [Explore the Live Application →](https://careercompass-dev.vercel.app/)
+
 CareerCompass is a full-stack engineering solution designed to navigate the 2026 technical landscape. It utilizes Large Language Models (LLMs) to perform semantic gap analysis between a developer's current stack and real-time market requirements.
 
 ---
