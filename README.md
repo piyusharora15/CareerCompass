@@ -1,26 +1,61 @@
-# CareerCompass | AI-Driven Skill Gap Analysis & Roadmap Engine
+# 🚀 CareerCompass | AI-Driven Skill Gap Analysis & Roadmap Engine
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live_Now-emerald?style=for-the-badge&logo=vercel)](https://careercompass-dev.vercel.app/)
-[![GitHub License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](https://github.com/piyusharora15/career-compass/blob/main/LICENSE)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-emerald.svg?style=for-the-badge)](https://github.com/piyusharora15/career-compass/graphs/commit-activity)
+[![GitHub License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](https://github.com/piyusharora15/CareerCompass/blob/main/LICENSE)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-emerald.svg?style=for-the-badge)](https://github.com/piyusharora15/CareerCompass/graphs/commit-activity)
 
 ### 🔗 [Explore the Live Application →](https://careercompass-dev.vercel.app/)
 
-CareerCompass is a full-stack engineering solution designed to navigate the 2026 technical landscape. It utilizes Large Language Models (LLMs) to perform semantic gap analysis between a developer's current stack and real-time market requirements.
+CareerCompass is a high-performance Full-Stack (MERN) platform engineered to navigate the 2026 technical landscape. By leveraging **Gemini 3 Flash LLM**, the platform transforms static user profiles into dynamic, data-driven career growth strategies through semantic gap analysis.
 
 ---
 
-## 📌 Problem Statement
+## 📽️ Video Walkthrough
+*Watch how CareerCompass architects a personalized learning path in under 60 seconds.*
+
+[![Watch the Demo](https://cdn.loom.com/sessions/thumbnails/ed7f7f46a5e148c5b67b80de01308693-00001.jpg)](https://www.loom.com/share/ed7f7f46a5e148c5b67b80de01308693)
+
+---
+
+## 📌 The Problem
 The primary challenge for modern developers isn't the lack of resources, but the **lack of direction**.
-* **Skill Decay:** The half-life of technical skills is shrinking; what was industry-standard in 2024 is legacy by 2026.
-* **Analysis Paralysis:** General job descriptions provide broad requirements that don't translate into structured learning paths.
-* **Non-Persistent Learning:** Most roadmap tools are static; users lose milestone data across sessions, leading to fragmented learning.
+* **Skill Decay:** Technical skills have a shrinking half-life; 2024 standards are legacy by 2026.
+* **Analysis Paralysis:** Vague job descriptions don't translate into structured learning.
+* **Non-Persistent Learning:** Most tools are static; users lose progress across sessions.
 
 ## 💡 The Solution
-CareerCompass acts as a persistent "Personal Engineering Manager":
-1. **Delta Analysis:** Identifies the specific "delta" (gap) between a user's profile and 2026 market standards.
-2. **Skill Architect:** Generates a hierarchical learning roadmap with vetted documentation and tutorials.
-3. **State Synchronization:** Unlike static generators, it persists progress to a cloud database, enabling long-term goal tracking.
+CareerCompass acts as a persistent **"Personal Engineering Manager"**:
+1. **Delta Analysis:** Identifies the specific "delta" between your current profile and 2026 market standards.
+2. **Skill Architect:** Generates hierarchical roadmaps with vetted documentation (MDN, Official Docs).
+3. **State Synchronization:** Persists progress to a cloud database for long-term goal tracking.
+
+---
+
+## ✨ Key Features & Example Outputs
+
+### 🧠 AI-Powered Skill Architect
+The heart of the app is a custom orchestration layer that uses **Gemini 3 Flash** in strict `JSON Mode`. 
+
+**Example AI Output (Structured Analysis):**
+```json
+{
+  "skill_coverage": 65,
+  "critical_gaps": ["Redis Caching", "Kafka Event-Driven Architecture", "Dockerization"],
+  "priority_roadmap": [
+    {
+      "step": 1,
+      "topic": "Redis Fundamentals",
+      "resource": "[https://redis.io/docs/](https://redis.io/docs/)",
+      "complexity": "Intermediate"
+    }
+  ]
+}
+```
+
+🔄 Real-Time State Persistence
+Optimistic UI: Check off milestones with zero-latency.
+
+Sync Engine: Asynchronous background updates ensure your progress is saved to MongoDB Atlas without page reloads.
 
 ---
 
@@ -72,6 +107,12 @@ The frontend renders an interactive timeline using **Framer Motion**. Every time
 1. An optimistic UI update occurs.
 2. An asynchronous `POST` request is sent to `/api/roadmap/toggle-complete`.
 3. The global `Progress Bar` recalculates based on the updated DB state.
+
+---
+## 🔧 Technical Challenges & Solutions
+* **LLM Non-Determinism:** Enforced strict JSON schemas in prompts to prevent frontend crashes from unstructured AI text.
+* **OAuth Proxy Issues:** Configured trust proxy in Express and proxy: true in Passport to handle Render's HTTPS reverse proxy.
+* **CORS Mismatches:** Implemented a dynamic origin whitelist to allow secure communication between Vercel and Render.
 
 ---
 
