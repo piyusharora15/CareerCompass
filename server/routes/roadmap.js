@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { requireSignin } from "../middleware/auth.js";
-import roadmapController from "../controllers/roadmapController.js";
+import * as roadmapController from "../controllers/roadmapController.js";
 
 const router = Router();
 
