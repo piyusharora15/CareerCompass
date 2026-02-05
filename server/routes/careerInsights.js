@@ -1,6 +1,6 @@
 import express from "express";
 import { requireSignin } from "../middleware/auth.js";
-import insightController from "../controllers/insightController.js";
+import * as insightController from "../controllers/insightController.js";
 
 const router = express.Router();
 
