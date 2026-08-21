@@ -8,7 +8,7 @@ if (!process.env.GEMINI_API_KEY) {
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Using the specified Gemini 3 Flash model
-const MODEL = "gemini-3-flash-preview";
+const MODEL = "gemini-3.5-flash";
 
 export const generateWithGemini = async (prompt) => {
   try {
